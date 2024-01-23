@@ -1,0 +1,51 @@
+---
+# tasks file for export_mysqlDB_role
+
+
+
+### 1- Install pip on server to can Install pymysql
+- name: Install the package "pip"
+  ansible.builtin.apt:
+    name: python3-pip
+
+### 2- Install pymysql using pip as a prerequest for mysql.mysql_db
+- name: make sure pymysql is present
+  ansible.builtin.pip:
+    name: pymysql
+    state: present
+
+
+### 3- Export DB and store it in path /media/ on server
+- name: Dump databases [export DB] 
+  community.mysql.mysql_db: # this mudole not Idempotent
+    state: dump
+    name: "{{ item }}"
+    login_password: "{{ db_password }}"
+    target: /media/{{ item }}.sql
+  loop: "{{ databases }}"
+
+
+
+### 4- copy db from server to local machine to path ./files/
+- name: Fetch file from remote server
+  ansible.builtin.fetch: # this mudole not Idempotent
+    src: /media/{{ item }}.sql
+    dest: ./files/
+    flat: yes
+  loop: "{{ databases }}"
+
+
+
+
+
+# this way to copy files need to handle ssh between servers
+
+# - name: Copy the file from old-server to new-server using Method Push
+#   tags: sync-push
+#   synchronize:
+#     src: "/media/{{ item }}.sql"
+#     dest: "/media/{{ item }}.sql"
+#     mode: push
+#   delegate_to: '{{new_server_ip}}' 
+#   register: syncfile
+#   loop: "{{ databases }}"

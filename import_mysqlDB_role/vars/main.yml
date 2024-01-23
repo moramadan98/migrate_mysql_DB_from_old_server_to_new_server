@@ -1,0 +1,10 @@
+---
+# vars file for import_mysqlDB_role
+
+db_user: root
+
+databases: # names of databases u need to import
+  - picka
+  - live
+
+# note : Create picka before live according to dependency

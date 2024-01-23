@@ -1,0 +1,31 @@
+
+### before use ###
+# make sure u have ssh connection to old-server and new-server
+
+
+- hosts: old-server
+  remote_user: "{{ db_user }}"
+  become : yes
+  vars_prompt:
+    - name: db_password
+      prompt: enter DB password?
+      private: false
+  roles:
+    - export_mysqlDB_role
+
+
+- hosts: new-server
+  remote_user: "{{ db_user }}"
+  become : yes
+  vars_prompt:
+    - name: db_password
+      prompt: enter DB password?
+      private: false
+  roles:
+    - import_mysqlDB_role
+
+
+
+   
+
+

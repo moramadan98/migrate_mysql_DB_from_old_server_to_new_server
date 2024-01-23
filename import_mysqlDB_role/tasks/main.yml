@@ -1,0 +1,43 @@
+---
+# tasks file for import_mysqlDB_role
+
+
+
+### 1- Install pip on server to can Install pymysql
+- name: Install the package "pip"
+  ansible.builtin.apt:
+    name: python3-pip
+
+### 2- Install pymysql using pip as a prerequest for mysql.mysql_db
+- name: make sure pymysql is present
+  ansible.builtin.pip:
+    name: pymysql
+    state: present
+
+
+
+
+### 3- copy db form local machine to new server to path /media/
+- name: Transfer Database Dump to New Server
+  ansible.builtin.copy:
+    src: ./files/{{ item }}.sql
+    dest: /media/{{ item }}.sql
+  loop: "{{ databases }}"
+
+### 4- Create db with names u need
+- name: Create new databases with names
+  community.mysql.mysql_db:
+    name:
+      - "{{item}}"
+    login_password: "{{ db_password }}"
+    state: present
+  loop: "{{ databases }}"
+
+### 5- import db
+- name: Restore database
+  community.mysql.mysql_db: # this mudole not Idempotent
+    name: "{{item}}"
+    login_password: "{{ db_password }}"
+    state: import
+    target: /media/{{ item }}.sql
+  loop: "{{ databases }}"

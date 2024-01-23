@@ -1,0 +1,12 @@
+---
+# vars file for export_mysqlDB_role
+
+
+
+db_user: root # DB user 
+
+databases: # names of databases u need to export 
+  - live
+  - picka
+
+
