@@ -1,0 +1,7 @@
+galaxy_info:
+  author: Mohamed Ramadan
+  name: export_mysqlDB_role
+  version: 0.1
+  description: A role to export databases
+  min_ansible_version: 2.9
+

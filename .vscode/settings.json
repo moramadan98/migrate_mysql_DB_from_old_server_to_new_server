@@ -1,3 +1,6 @@
 {
-  "ansible.python.interpreterPath": "/bin/python3"
+  "ansible.python.interpreterPath": "/bin/python3",
+  "ansible.ansible.reuseTerminal": false,
+  "ansible.lightspeed.enabled": true,
+  "ansible.lightspeed.suggestions.enabled": true
 }
